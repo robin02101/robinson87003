@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        .all{
+            background-color: transparent;
+            background-image: url('./img/台灣.png'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+        }
+        .title {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+        .nav-btn{
+            width: 110px;
+            height: 30px;
+            background-color: antiquewhite;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .box{
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 50px;
+        }
+        .card-region {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+        }
+        .card {
+            border: 1px solid black;
+            width: 25%;
+            /* width: calc((100% - 30px * 3) / 3); */
+            height: 350px;
+            margin-right: 50px;
+            margin-bottom: 50px;
+            text-align: center;
+            padding: 10px;
+            color: antiquewhite;
+            background-color: transparent;
+            background-image: url('./img/天氣卡.jpg_w700wb'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            border-radius: 10%;
+        }
+        @media (max-width:1000px){
+            .card{
+                width: 30%;
+            }
+        }
+        @media (max-width:860px){
+            .card{
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="all">
+        <div class="title">台灣天氣預報</div>
+    <div class="box">
+    <div class="nav-btn">全省天氣預報</div>
+    <div class="nav-btn">北部天氣預報</div>
+    <div class="nav-btn">中部天氣預報</div>
+    <div class="nav-btn">南部天氣預報</div>
+    <div class="nav-btn">東部天氣預報</div>
+    <div class="nav-btn">外島天氣預報</div>
+</div>
+     <div class="card-region">
+        <div class="card"></div>
+    </div>
+</div>
+    <script>
+         let btnAll = document.querySelectorAll('.nav-btn');
+
+        let cities = [
+        ['基隆市', '新北市', '臺北市', '桃園市', '新竹市', '新竹縣', '苗栗縣', '臺中市', '南投縣', '彰化縣', '雲林縣', '嘉義市', '嘉義縣', '臺南市', '高雄市', '屏東縣', '宜蘭縣', '花蓮縣', '臺東縣', '澎湖縣', '金門縣', '連江縣'],
+        ['基隆市', '新北市', '臺北市', '桃園市', '新竹市', '新竹縣', '苗栗縣'],
+        ['臺中市', '南投縣', '彰化縣', '雲林縣', '嘉義市', '嘉義縣'],
+        ['臺南市', '高雄市', '屏東縣'],
+        ['宜蘭縣', '花蓮縣', '臺東縣'], 
+        ['澎湖縣', '金門縣', '連江縣'],
+        ]
+        let nowCities = cities[0];
+        let orgData = {};
+
+        let url = 'https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWA-DFBBD5C7-45B3-4B99-AE41-BA228934FA91'
+
+
+        fetch_data();
+
+        btnAll.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                nowCities = cities[index];
+                fetch_data(); 
+            });
+        });
+
+        function fetch_data() {
+            fetch(url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (datas) {
+                    console.log(datas);
+                    // 1. 組織資料
+                    organizationData(datas);
+                    // 2. 處理程式
+                    arrangeCites();
+                });
+        }
+
+        function organizationData(data){
+            let locationAll = data.records.location
+            console.log(locationAll);
+            locationAll.forEach(location =>{
+                let locationName = location.locationName;
+                let loc_wE_t0 = location.weatherElement[0].time[0];
+                let wxCondition = loc_wE_t0.parameter.parameterName;
+                let startTime = loc_wE_t0.startTime;
+                let endTime = loc_wE_t0.endTime;
+                let maxT = location.weatherElement[4].time[0].parameter.parameterName;
+                let minT = location.weatherElement[2].time[0].parameter.parameterName;
+                let pop = location.weatherElement[1].time[0].parameter.parameterName;
+                let ci = location.weatherElement[3].time[0].parameter.parameterName;
+                orgData[locationName] = {
+                    'wxCondition': wxCondition,
+                    'startTime': startTime,
+                    'endTime': endTime,
+                    'maxT': maxT,
+                    'minT': minT,
+                    'pop': pop,
+                    'ci': ci
+                }
+            });
+        }
+        function arrangeCites() {
+    let cardRegion = document.querySelector('.card-region');
+    cardRegion.innerHTML = '';
+
+    nowCities.forEach((city, index) => {
+        let cityData = orgData[city];
+        // 生成卡片
+        let card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = `
+            <span class="city"> ${city} </span>
+            <span class="city"> ${cityData.wxCondition} </span><br>
+            <span class="city">開始時間：${cityData.startTime} </span><br>
+            <span class="city">結束時間：${cityData.endTime} </span><br><br>
+            <span class="city"> 最低溫度:${cityData.minT} </span><br><br>
+            <span class="city">最高溫度:${cityData.maxT} </span><br><br>
+            <span class="city">降雨概率:${cityData.pop} </span><br><br>
+            <span class="city">人體感受:${cityData.ci} </span><br><br>
+        `;
+        if (cityData.wxCondition === '陰短暫雨') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰時多雲短暫雨.svg'; 
+            card.appendChild(svgImage);
+        }
+        else if (cityData.wxCondition === '陰天') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰天.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '多雲') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/多雲.svg'; 
+            card.appendChild(svgImage);
+        }
+        else if (cityData.wxCondition === '晴時多雲') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/晴時多雲.svg'; 
+            card.appendChild(svgImage);
+        }
+        else if (cityData.wxCondition === '陰時多雲') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰時多雲.svg'; 
+            card.appendChild(svgImage);
+        }
+        else if (cityData.wxCondition === '多雲時陰') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/多雲時陰.svg'; 
+            card.appendChild(svgImage);
+        } else if (cityData.wxCondition === '晴天') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/晴天.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '雨天') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/雨天.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '陰有雨') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰有雨.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '多雲有霧') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/多雲有霧.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '多雲時晴') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/多雲時晴.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '陰時多雲短暫雨') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰時多雲短暫雨.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '多雲短暫雨') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/多雲陣雨.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '陰陣雨') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰有雨.svg'; 
+            card.appendChild(svgImage);
+        }else if (cityData.wxCondition === '陰短暫陣雨') {
+            let svgImage = document.createElement('img');
+            svgImage.src = './svg/陰有雨.svg'; 
+            card.appendChild(svgImage);
+        }
+        cardRegion.appendChild(card);
+    });
+}
+    </script>
+</body>
+</html>

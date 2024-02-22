@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        #all{
+            width: 100%;
+            height: 500vh;
+            position: relative;
+        }
+        .banner{
+            width: 100%;
+            height: 100vh;
+
+            background-size:cover;
+            background-attachment:fixed;
+            position: relative;
+            opacity: 0.6;
+        }
+        #banner-1{
+            background-image: url(./img/6.jpg);
+        }
+        #banner-2{
+            background-image: url(./img/3.jpg);
+        }
+        #banner-3{
+            background-image: url(./img/4.jpg);
+        }
+        #banner-4{
+            background-image: url(./img/5.jpg);
+        }
+        .btn-14{
+            background-color: grey;
+            position:relative;
+            text-align: center;
+            font-size: 32px;
+            display: inline-block;
+            border-radius: 5px;
+            color: white;
+            padding: 30px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor:pointer
+        }
+       .content{
+            width: calc(100% - 40px);
+            position:relative;
+            padding: 20px;
+        }
+        #content-1{
+            height: 300px;
+        }
+        .content-23{
+            height: 200px;
+            background-color: black;
+        }
+        #title-1{
+            width: 300px;
+            height: 50px;
+            position:absolute;
+            text-align: center;
+            left: calc(50% - 150px);
+            top: 40px;
+            letter-spacing: 3px;
+            font-weight: bold;
+            font-size: 28px;
+        }
+        #text-1{
+            width: 80%;
+            height: 200px;
+            color: gray;
+            position:absolute;
+            top: 100px;
+            
+            left: 10%;
+            font-size: 14px;
+        }
+        .btn-23{
+            position:relative;
+            text-align: center;
+            font-size: 32px;
+            display: inline-block;
+            border-radius: 5px;
+            color: white;
+            padding: 30px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor:pointer
+        }
+        .text-23{
+            width: 80%;
+            height: 200px;
+            color: white;
+            position:absolute;
+            top: 100px;
+            left: 10%;
+            font-size: 18px;
+        }
+    
+       
+    </style>
+</head>
+<body>
+   <div id="all">
+    <div id="banner-1" class="banner">
+        <div id="btn-1" class="btn-14">SCROLL DOWN</div>
+    </div>
+    <div id="content-1" class="content">
+        <div id="title-1">PARALLAX DEMO</div>
+        <div id="text-1">Parallax scrolling is a web site trend where the background content is moved at a different speed than the foreground content while scrolling. Nascetur per nec posuere turpis, lectus nec libero turpis nunc at, sed posuere mollis ullamcorper libero ante lectus, blandit pellentesque a, magna turpis est sapien duis blandit dignissim. Viverra interdum mi magna mi, morbi sociis. Condimentum dui ipsum consequat morbi, curabitur aliquam pede, nullam vitae eu placerat eget et vehicula. Varius quisque non molestie dolor, nunc nisl dapibus vestibulum at, sodales tincidunt mauris ullamcorper, dapibus pulvinar, in in neque risus odio. Accumsan fringilla vulputate at quibusdam sociis eleifend, aenean maecenas vulputate, non id vehicula lorem mattis, ratione interdum sociis ornare. Suscipit proin magna cras vel, non sit platea sit, maecenas ante augue etiam maecenas, porta porttitor placerat leo.</div>
+    </div>
+    <div id="banner-2" class="banner">
+        <div id="btn-2" class="btn-23">LESS HEIGHT</div>
+    </div>
+    <div id="content-2" class="content content-23">
+        
+        <div id="text-2" class="text-23">Scroll up and down to really get the feeling of how Parallax Scrolling works.</div>
+    </div>
+    <div id="banner-3" class="banner">
+        <div id="btn-3" class="btn-23">SCROLL UP</div>
+    </div>
+    <div id="content-3" class="content content-23">
+        
+        <div id="text-3" class="text-23">Scroll up and down to really get the feeling of how Parallax Scrolling works.</div>
+    </div>
+    <div id="banner-4" class="banner">
+        <div id="btn-4" class="btn-14">COOL!</div>
+    </div>
+   </div> 
+</body>
+</html>

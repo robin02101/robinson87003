@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        .box{
+             width: 300px;
+             height: 300px;
+             margin: 100px auto;
+             background-color: rgb(255, 255, 255);
+             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+             border-radius: 10px;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: space-around;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h1>My Blog</h1>
+    <div>賬號：<input type="text" class="account"></div>
+    <div>密碼：<input type="password" class="password"></div>
+    <div>
+    <button class="add-btn" type="button">登入</button>
+    <button class="login-btn" type="button">注冊</button>
+    </div>
+</div>
+
+<script>
+    const account = document.querySelector('.account');
+    const password = document.querySelector('.password');
+
+    const addBtn = document.querySelector('.add-btn');
+    const loginBtn = document.querySelector('.login-btn');
+    let idArr = [];
+    let loginId = [];
+    if(localStorage.getItem('todoList')){
+      idArr =JSON.parse(localStorage.getItem('todoList')) ;
+    }
+    if(localStorage.getItem('List')){
+        loginId =JSON.parse(localStorage.getItem('List')) ;
+    }
+    //拿來清除數據
+    //  localStorage.removeItem('todoList');
+    // localStorage.removeItem('List');
+    loginBtn.addEventListener('click', () => {
+        const accountValue = account.value;
+        const passwordValue = password.value;
+        const id = idArr.length;
+        if(accountValue !=='' && passwordValue !==''){
+            const addArr = {
+         
+          account:accountValue,
+          password: passwordValue,
+         
+        } 
+        alert('注冊成功！')
+        idArr.push(addArr);
+        account.value = '';
+        password.value = '';
+        const arrData = JSON.stringify(idArr);
+        localStorage.setItem('todoList', arrData);
+        }else{
+            alert('請輸入帳號或密碼！');
+        }
+    });
+    addBtn.addEventListener('click', () => {
+        const idValue = account.value;
+        const pwValue = password.value;
+
+    
+    if (idArr.find(item => item.account === idValue && item.password === pwValue)) {
+        const addlogin = {
+         account:idValue,
+       } 
+       loginId.push(addlogin);
+        const loginData = JSON.stringify(loginId);
+        localStorage.setItem('List', loginData);
+        window.location.assign("http://127.0.0.1:5501/20240219/Blog.html");
+
+    } else {
+        alert("賬號或密碼錯誤");
+    }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            background-color: antiquewhite;
+            display: flex;
+        }
+        .all{
+            display: flex;
+            width: 80%;
+            height: 100vh;
+            margin:auto;
+            flex-wrap: wrap;
+        }
+        .box{
+            height: 30%;
+            width: 100%;
+            display: flex;
+            justify-content:space-around;
+            flex-direction: column;
+            align-items: center;
+        }
+       
+        .nav{
+            height: 100%;
+            width: 100px;
+            align-items: center;
+           display: flex;
+           justify-content: center;
+           flex-wrap: wrap;
+            
+        }
+        .img{
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background-image: url(./img/1.jpg);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        .username{
+            width: 80%;
+            height: 25px;
+            text-align: center;
+        }
+        .text{
+            height: 150px;
+            width: 300px;  
+        }
+        .todo{
+            
+            height: 70%;
+            width: 100%;
+            text-align: center;
+            /* border-collapse: collapse; */
+        }
+        th{
+            border-bottom: 1px solid black;
+        }
+        .w-3{
+            width: 25%;
+        }
+        .w-6{
+            width: 50%;
+            
+        }
+        .br {
+            height: 300px;
+            width: 100%;
+            overflow: auto;
+            max-height: 150px;
+            height: 150px;
+            background-color: white;
+            border: 1px solid black;
+            text-align: left;
+            max-width:700px;
+            padding: 5px;
+        }
+        .reply{
+            width: 100%;
+            max-height: 150px; 
+            overflow: auto; 
+            height: 150px;
+            background-color: white;
+            border: 1px solid black;
+            
+            
+        }
+        .reply-div{
+            
+            width: 100%;
+            word-wrap: break-word;
+            
+        }
+    </style>
+</head>
+<body><div class="nav">
+            <div class="img"></div>
+            <div>歡迎使用者</div>
+            <div class="username"></div>
+            <button class="back">登出頁面</button>
+        </div>
+    <div class="all">
+         
+        <div class="box">
+            <h1>長相不重要，功能很齊全</h1>
+            <textarea class="text" name="message" rows="4" cols="50"></textarea>
+            <button class="add-Todo" type="button">新增</button>
+        </div>
+
+        <table  class="todo">
+            <thead>
+                <tr>
+                    <th class="w-6">文章</th>
+                    <th class="w-3"></th>
+                    <th class="w-3">留言</th>
+                </tr>
+            </thead>
+            <tbody  class="data-show">
+            </tbody> 
+        </table>
+    </div>
+    <script>
+        const dataShow = document.querySelector('.data-show');
+        const addText = document.querySelector('.text');
+        const addTodo = document.querySelector('.add-Todo');
+
+        const loginData = localStorage.getItem('List');
+        const loginId = JSON.parse(loginData);  
+        console.log(loginId);
+        
+        const username = document.querySelector('.username');
+
+        username.innerHTML += `${loginId[0].account}`
+
+        const back = document.querySelector('.back');
+
+        back.addEventListener('click',() =>{
+            localStorage.removeItem('List');
+            window.location.assign("http://127.0.0.1:5501/20240219/%E7%99%BB%E5%85%A5.html");
+        });
+          //拿來清除數據
+        //   localStorage.removeItem('todoList');
+        // localStorage.removeItem('List');
+        addTodo.addEventListener('click', () => {
+            const text = addText.value.trim();
+            if (text !== "") {
+                dataShow.innerHTML += `
+                    <tr>
+                        <td><div class="br">${text}</div></td>
+                        <td><button class="reply-btn">回复</button></td>
+                        <td><div class="reply"></div></td>
+                    </tr>
+                `;  
+               
+            } else {
+                alert('請輸入文章内容！');
+            }
+        });
+        
+        dataShow.addEventListener('click', (data) => {
+            if (data.target.classList.contains('reply-btn')) {
+             const replyText = prompt("請輸入留言内容：");
+            if (replyText !== null) {
+            const replyDiv = document.createElement('div');
+            replyDiv.classList.add('reply-div');
+            replyDiv.textContent = `留言者： ${replyText}`;
+
+
+            const dadtr = data.target.closest('tr');
+            const dadtd = dadtr.querySelector('.reply');
+           
+            dadtd.appendChild(replyDiv);
+        }
+    }   
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: #f06060;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            
+        }
+        .main{
+            width: 400px;
+            height: 200px;
+            position: absolute;
+            bottom: 50%;
+            left: calc(50% - 100px);
+            
+            display: flex;
+        }
+       
+
+        .continue-game {
+            display: none;
+        }
+        .box-1{
+            height: 100%;
+            width: 200px;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            
+        }
+        .box-2{
+            height: 100%;
+            width: 200px;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            left: calc(50% - 600px);
+        }
+        .box-big {
+            width: 520px;
+            height: 520px;
+            background-color: #d3d3d3;
+            margin: auto;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 10px;
+            z-index: 9;
+        }
+
+        .box {
+            width: 50%;
+            height: 50%;
+            background-color: aqua;
+            border: 5px solid #d3d3d3;
+            border-radius: 10px;
+        }
+
+        .answer {
+            opacity: 0.5;
+        }
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+        button{
+            width: 100%;
+            height: 30px;
+            background-color: skyblue;
+            border-radius: 10px;
+        }
+        button:hover{
+            background-color: rgb(0, 144, 247);
+        }
+        .text{
+          width: 100%;
+          text-align: center;  
+          font-size: 20px;   
+          
+        }
+        .wait-game,.start-game{
+            margin-bottom: 30px;
+        }
+        .animate__animated{
+            color: rebeccapurple;
+            font-size: 46px;
+            margin-bottom: 20px;
+        }
+        .opacity{
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="box-big"></div>
+<div class="main">
+    <div class="homepage box-1">
+        <p></p>
+        <div class="animate__animated animate__heartBeat animate__infinite animate__slow">色<span class="opacity">弱</span>測驗</div>
+        <button class="start-game">點擊開始</button>
+        <button class="continue-game">繼續游戲</button>
+    </div>
+    <div class="play-game box-2">
+        <p class="text">還剩下 <span id="demo-counter"> </span> 秒</p>
+        <h1 class="text">游戲中</h1>
+        <button class="wait-game">暫停游戲</button>
+        <button class="stop-game">終止游戲</button>
+
+    </div>
+</div>
+    <script>
+        let level = 2;
+        let size = 100 / level;
+        let count = 0;
+        let boxBig = document.querySelector('.box-big');
+        
+        let homepage = document.querySelector('.homepage');
+        let playGame = document.querySelector('.play-game');
+        let startGame = document.querySelector('.start-game');
+        let waitGame = document.querySelector('.wait-game');
+        let continueGame = document.querySelector('.continue-game');
+        let stopGame = document.querySelector('.stop-game');
+
+        let demoCounter = document.querySelector('#demo-counter');
+        let showCounter = document.querySelector('#show-counter');
+        let stopShowCounter = document.querySelector('#stop-show-counter');
+        let counterInterval;
+        const totalTime = 10
+        let counter = totalTime;
+
+        myStarGame();
+        MyWaitGame();
+        MyContinueGame();
+        MyStopGame();
+        boxBig.classList.add('hidden');
+        playGame.classList.add('hidden');
+        function myStarGame() {
+            startGame.addEventListener('click', () => {
+                // 先清空時間
+                
+                counter = totalTime;
+                demoCounter.innerHTML = counter;
+                homepage.classList.add('hidden');
+                playGame.classList.add('show'); 
+                boxBig.classList.remove('hidden');
+                
+                // 開始計時
+                console.log('start counter = ', counter);
+                counterInterval = setInterval(counterTimer, 1000);
+                game();
+            })
+        }
+
+        function MyWaitGame() {
+            waitGame.addEventListener('click', () => {
+                homepage.classList.remove('hidden');
+                playGame.classList.remove('show');
+                continueGame.classList.add('show');
+                // 停止計時
+                
+                boxBig.classList.add('hidden');
+                counterStop();
+            })
+        }
+
+        function MyContinueGame() {
+            continueGame.addEventListener('click', () => {
+                homepage.classList.add('hidden');
+                playGame.classList.add('show');
+                boxBig.classList.remove('hidden');
+                // 開始計時
+                counterInterval = setInterval(counterTimer, 1000)
+            })
+        }
+
+        function MyStopGame() {
+            stopGame.addEventListener('click', () => {
+                
+                location.reload();
+                // 停止計時
+                counterStop();
+            })
+        }
+
+        // 獲得新時間並顯示
+        function counterTimer() {
+            if (counter >= 0) {
+                console.log('show counter = ', counter);
+                demoCounter.innerHTML = counter--;
+            }else {
+                alert('時間到,游戲結束！');
+                counterStop();
+                location.reload();
+            }
+        }
+
+        // 停止計時
+        function counterStop() {
+            clearInterval(counterInterval);
+        }
+        function game() {
+            boxBig.innerHTML = '';
+            
+            let color =
+                `rgb(${Math.floor(Math.random() * 255) + 1}, ${Math.floor(Math.random() * 255) + 1} ,${Math.floor(Math.random() * 255) + 1})`;
+    
+            for (let i = 0; i < level ** 2; i++) {
+               
+                boxBig.innerHTML +=
+                    `<div class="box" style="width:${size}%; height:${size}%; background-color:${color};">`;
+            }
+            let randomAnswer = Math.floor(Math.random() * level ** 2) + 1;
+            let answerBox = document.querySelector(`.box-big .box:nth-of-type(${randomAnswer})`);
+
+            answerBox.classList.add("answer");
+
+            answerBox.style.opacity = `${0.5 - level*0.005}`;
+
+            let answerBtn = document.querySelector('.answer');
+            answerBtn.addEventListener('click', function () {
+                count++;
+                if (count === level) {
+                    level++;
+                    size = 100 / level;
+                    count = 0;
+                }
+                game();
+            });
+        }
+       
+    </script>
+</body>
+</html>
